@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" x-data="{ darkMode: localStorage.getItem('theme') === 'dark' }" x-bind:class="{ 'dark': darkMode }">
+<html lang="en" x-data="{ darkMode: localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : true }" x-bind:class="{ 'dark': darkMode }">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -87,7 +87,7 @@
         color: #fefefe; /* text-blue-300 */
       }
 
-         html #typed {
+        html #typed {
         color: #3d007d; /* text-blue-300 */
       }
 
@@ -220,8 +220,8 @@
     <div id="cursor" class="cursor"></div>
 
     <div id="main-content"
-         x-bind:class="{ 'blur-overlay': showIntro }"
-         x-init="
+          x-bind:class="{ 'blur-overlay': showIntro }"
+          x-init="
             if(showIntro) {
                 let introTyped = new Typed('#intro-typed-text', {
                     strings: ['Welcome to Surendar\'s Futuristic Portfolio'],
@@ -235,7 +235,7 @@
                     }
                 });
             }
-         ">
+          ">
       <svg class="floating-shape top-10 left-10 w-40 h-40 text-cyan-500" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /></svg>
       <svg class="floating-shape bottom-20 right-20 w-32 h-32 text-purple-600" fill="currentColor" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="5" /></svg>
 
