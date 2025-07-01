@@ -12,7 +12,7 @@
     <style>
       html {
         scroll-behavior: smooth;
-        cursor: none; /* Hide custom cursor by default */
+        cursor: none; /* Hide default cursor on all devices */
       }
       body {
         position: relative;
@@ -22,19 +22,8 @@
         transition: background-color 0.5s, color 0.5s;
       }
 
-      /* Custom cursor visibility based on pointer support */
-      @media (pointer: fine) {
-        html {
-          cursor: none; /* Show custom cursor only on devices with fine pointer */
-        }
-        .cursor {
-          display: block; /* Show the cursor div */
-        }
-      }
-
-      /* Hide the cursor div by default for touch devices */
+      /* Custom cursor styles - always visible now */
       .cursor {
-        display: none;
         position: fixed;
         width: 14px;
         height: 14px;
@@ -152,8 +141,9 @@
         color: #00ffcc;
         box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
         max-width: 700px;
-        margin-left: auto;
-        margin-right: auto;
+        /* The next two lines are handled by Tailwind's mx-auto now */
+        /* margin-left: auto; */
+        /* margin-right: auto; */
       }
       .flip-card {
         perspective: 1000px;
@@ -264,7 +254,7 @@
           <h1 class="text-xl font-bold text-black dark:text-white tracking-wide neon-glow mb-2 sm:mb-0 text-center sm:text-left w-full sm:w-auto">Surendar</h1>
           <nav class="space-x-4 md:space-x-6 z-50 opacity-100 visible flex items-center mt-2 sm:mt-0">
             <a href="#about" class="text-black dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 transition text-sm md:text-base">About</a>
-            <a href="#projects" class="text-black dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 transition text-sm md:text-base">Projects</a>
+            <a href="#projects"  style="color: #ffffff !important; font-size: 1rem !important; font-weight: normal !important; opacity: 1 !important; visibility: visible !important; display: inline-block !important;" class="text-black dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 transition text-sm md:text-base">Projects</a>
             <a href="#contact" class="text-black dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 transition text-sm md:text-base">Contact</a>
             <a href="resume.pdf" class="text-white bg-blue-600 border border-blue-600 rounded px-3 py-1 hover:bg-blue-700 hover:border-blue-700 transition text-sm md:text-base">Resume</a>
 
@@ -285,7 +275,7 @@
         </div>
       </header>
 
-      <section class="h-screen flex flex-col items-center justify-center relative pt-24 overflow-hidden text-center z-10 px-4">
+      <section class="h-screen flex flex-col items-center justify-center relative pt-24 overflow-hidden text-center z-10 px-4 sm:px-6 md:px-8">
         <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-4 tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 animate-pulse">Hi, I'm Surendar</h1>
         <div class="text-xl sm:text-2xl md:text-3xl mb-6 text-gray-800 dark:text-blue-300">
           <span id="typed"></span>
@@ -294,20 +284,20 @@
         <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce text-cyan-500 text-sm">Scroll ↓</div>
       </section>
 
-      <div class="terminal-box mx-4">
+      <div class="terminal-box mx-auto px-4 sm:px-6 md:px-8">
         <p>$ whoami</p>
         <p>surendar@developer:~$ Passionate about futuristic UI and full-stack innovation</p>
         <p>surendar@developer:~$ Crafting immersive web experiences with code + creativity</p>
       </div>
 
-      <section class="py-16 sm:py-24 px-6 bg-gray-100 dark:bg-gray-800" id="about">
+      <section class="py-16 sm:py-24 px-4 sm:px-6 md:px-8 bg-gray-100 dark:bg-gray-800" id="about">
         <div class="max-w-5xl mx-auto text-center">
           <h2 class="text-4xl sm:text-5xl font-bold mb-6 sm:mb-8 text-gray-900 dark:text-white">About Me</h2>
           <p class="text-base sm:text-xl text-gray-700 dark:text-gray-300 leading-relaxed">I'm a passionate developer focused on building modern, scalable, and responsive web applications. With experience in Angular, Tailwind CSS, Firebase, and more, I strive to deliver clean UI, delightful animations, and practical solutions that make life easier.</p>
         </div>
       </section>
 
-      <section class="py-16 sm:py-24 px-6 bg-gray-50 dark:bg-gray-900" id="projects">
+      <section class="py-16 sm:py-24 px-4 sm:px-6 md:px-8 bg-gray-50 dark:bg-gray-900" id="projects">
         <div class="max-w-6xl mx-auto">
           <h2 class="text-4xl sm:text-5xl font-bold text-center mb-10 sm:mb-16 text-gray-900 dark:text-white">Projects</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
@@ -348,7 +338,7 @@
         </div>
       </section>
 
-      <section class="py-16 sm:py-24 px-6 bg-gray-100 dark:bg-gray-800" id="contact">
+      <section class="py-16 sm:py-24 px-4 sm:px-6 md:px-8 bg-gray-100 dark:bg-gray-800" id="contact">
         <div class="max-w-3xl mx-auto text-center">
           <h2 class="text-4xl sm:text-5xl font-bold mb-6 sm:mb-8 text-gray-900 dark:text-white">Contact Me</h2>
           <p class="mb-6 sm:mb-8 text-base sm:text-lg text-gray-700 dark:text-gray-300">Want to work together or just say hi? Drop a message below or reach out through social media.</p>
@@ -383,13 +373,11 @@
       });
 
       const cursor = document.getElementById("cursor");
-      // Only attach mousemove listener if pointer: fine (desktop-like device)
-      if (window.matchMedia('(pointer: fine)').matches) {
-          document.addEventListener("mousemove", (e) => {
-              cursor.style.left = e.clientX + "px";
-              cursor.style.top = e.clientY + "px";
-          });
-      }
+      // Always attach mousemove listener as per request
+      document.addEventListener("mousemove", (e) => {
+          cursor.style.left = e.clientX + "px";
+          cursor.style.top = e.clientY + "px";
+      });
     </script>
   </body>
 </html>
