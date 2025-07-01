@@ -375,8 +375,10 @@
       const cursor = document.getElementById("cursor");
       // Always attach mousemove listener as per request
       document.addEventListener("mousemove", (e) => {
-          cursor.style.left = e.clientX + "px";
-          cursor.style.top = e.clientY + "px";
+          if (cursor) {
+            cursor.style.left = e.clientX + "px";
+            cursor.style.top = e.clientY + "px";
+          }
       });
     </script>
   </body>
