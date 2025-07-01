@@ -12,15 +12,38 @@
     <style>
       html {
         scroll-behavior: smooth;
-        cursor: none;
+        cursor: none; /* Hide custom cursor by default */
       }
       body {
         position: relative;
         overflow-x: hidden;
-        /* Default light theme styles for body */
         background-color: #f9fafb; /* bg-gray-50 */
         color: #111827; /* text-gray-900 */
         transition: background-color 0.5s, color 0.5s;
+      }
+
+      /* Custom cursor visibility based on pointer support */
+      @media (pointer: fine) {
+        html {
+          cursor: none; /* Show custom cursor only on devices with fine pointer */
+        }
+        .cursor {
+          display: block; /* Show the cursor div */
+        }
+      }
+
+      /* Hide the cursor div by default for touch devices */
+      .cursor {
+        display: none;
+        position: fixed;
+        width: 14px;
+        height: 14px;
+        background: radial-gradient(circle, #0ff, #00f);
+        border-radius: 9999px;
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+        z-index: 1001;
+        box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
       }
 
       /* Dark mode styles for core elements */
@@ -87,7 +110,7 @@
         color: #fefefe; /* text-blue-300 */
       }
 
-        html #typed {
+      html #typed {
         color: #3d007d; /* text-blue-300 */
       }
 
@@ -119,17 +142,7 @@
         0%, 100% { transform: translateY(0); }
         50% { transform: translateY(-20px); }
       }
-      .cursor {
-        position: fixed;
-        width: 14px;
-        height: 14px;
-        background: radial-gradient(circle, #0ff, #00f);
-        border-radius: 9999px;
-        pointer-events: none;
-        transform: translate(-50%, -50%);
-        z-index: 1001;
-        box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
-      }
+      
       .terminal-box {
         background-color: #111827;
         border-radius: 1rem;
@@ -197,9 +210,16 @@
         animation: blink 0.7s infinite;
         color: #38bdf8;
       }
-      #projects{
-        color : rgb(0, 0, 0) !important
+      /* Ensure project text color is visible in light mode */
+      #projects h2 {
+          color: rgb(0, 0, 0) !important;
       }
+      /* Ensure project text color is visible in dark mode */
+      html.dark #projects h2 {
+          color: #e2e8f0 !important;
+      }
+
+
       @keyframes blink {
         0% { opacity: 1; }
         50% { opacity: 0; }
@@ -239,24 +259,24 @@
       <svg class="floating-shape top-10 left-10 w-40 h-40 text-cyan-500" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /></svg>
       <svg class="floating-shape bottom-20 right-20 w-32 h-32 text-purple-600" fill="currentColor" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="5" /></svg>
 
-      <header class="fixed top-0 left-0 w-full z-40 bg-gray-100/80 backdrop-blur-md border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center z-50">
-          <h1 class="text-xl font-bold text-black tracking-wide neon-glow">Surendar</h1>
-          <nav class="space-x-6 z-50 opacity-100 visible flex items-center">
-            <a href="#about" class="text-black hover:text-blue-700 transition">About</a>
-            <a href="#projects" style="color: #ffffff !important; font-size: 1rem !important; font-weight: normal !important; opacity: 1 !important; visibility: visible !important; display: inline-block !important;" class="hover:text-blue-700 transition">Projects</a>
-            <a href="#contact" class="text-black hover:text-blue-700 transition">Contact</a>
-            <a href="resume.pdf" class="text-white bg-blue-600 border border-blue-600 rounded px-3 py-1 hover:bg-blue-700 hover:border-blue-700 transition">Resume</a>
+      <header class="fixed top-0 left-0 w-full z-40 bg-gray-100/80 dark:bg-gray-800/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center z-50">
+          <h1 class="text-xl font-bold text-black dark:text-white tracking-wide neon-glow mb-2 sm:mb-0 text-center sm:text-left w-full sm:w-auto">Surendar</h1>
+          <nav class="space-x-4 md:space-x-6 z-50 opacity-100 visible flex items-center mt-2 sm:mt-0">
+            <a href="#about" class="text-black dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 transition text-sm md:text-base">About</a>
+            <a href="#projects" class="text-black dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 transition text-sm md:text-base">Projects</a>
+            <a href="#contact" class="text-black dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 transition text-sm md:text-base">Contact</a>
+            <a href="resume.pdf" class="text-white bg-blue-600 border border-blue-600 rounded px-3 py-1 hover:bg-blue-700 hover:border-blue-700 transition text-sm md:text-base">Resume</a>
 
             <button @click="darkMode = !darkMode; localStorage.setItem('theme', darkMode ? 'dark' : 'light')"
-                    class="ml-6 p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-300 focus:outline-none">
+                    class="ml-2 sm:ml-6 p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-300 focus:outline-none">
               <template x-if="darkMode">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                 </svg>
               </template>
               <template x-if="!darkMode">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h1M4 12H3m15.325 6.775l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                 </svg>
               </template>
@@ -265,66 +285,88 @@
         </div>
       </header>
 
-      <section class="h-screen flex flex-col items-center justify-center relative pt-24 overflow-hidden text-center z-10">
-        <h1 class="text-6xl md:text-7xl font-extrabold mb-4 tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 animate-pulse">Hi, I'm Surendar</h1>
-        <div class="text-2xl md:text-3xl mb-6 text-gray-800 dark:text-blue-300">
+      <section class="h-screen flex flex-col items-center justify-center relative pt-24 overflow-hidden text-center z-10 px-4">
+        <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-4 tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 animate-pulse">Hi, I'm Surendar</h1>
+        <div class="text-xl sm:text-2xl md:text-3xl mb-6 text-gray-800 dark:text-blue-300">
           <span id="typed"></span>
         </div>
-        <a href="#projects" class="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-cyan-600 hover:to-blue-600 px-10 py-4 rounded-full text-white text-lg font-medium shadow-xl transition-all duration-300">View My Work</a>
+        <a href="#projects" class="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-cyan-600 hover:to-blue-600 px-8 py-3 sm:px-10 sm:py-4 rounded-full text-white text-base sm:text-lg font-medium shadow-xl transition-all duration-300">View My Work</a>
         <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce text-cyan-500 text-sm">Scroll ↓</div>
       </section>
 
-      <div class="terminal-box">
+      <div class="terminal-box mx-4">
         <p>$ whoami</p>
         <p>surendar@developer:~$ Passionate about futuristic UI and full-stack innovation</p>
         <p>surendar@developer:~$ Crafting immersive web experiences with code + creativity</p>
       </div>
 
-      <section class="py-24 px-6 bg-gray-100" id="about">
+      <section class="py-16 sm:py-24 px-6 bg-gray-100 dark:bg-gray-800" id="about">
         <div class="max-w-5xl mx-auto text-center">
-          <h2 class="text-5xl font-bold mb-8 text-gray-900">About Me</h2>
-          <p class="text-xl text-gray-700 leading-relaxed">I'm a passionate developer focused on building modern, scalable, and responsive web applications. With experience in Angular, Tailwind CSS, Firebase, and more, I strive to deliver clean UI, delightful animations, and practical solutions that make life easier.</p>
+          <h2 class="text-4xl sm:text-5xl font-bold mb-6 sm:mb-8 text-gray-900 dark:text-white">About Me</h2>
+          <p class="text-base sm:text-xl text-gray-700 dark:text-gray-300 leading-relaxed">I'm a passionate developer focused on building modern, scalable, and responsive web applications. With experience in Angular, Tailwind CSS, Firebase, and more, I strive to deliver clean UI, delightful animations, and practical solutions that make life easier.</p>
         </div>
       </section>
 
-      <section class="py-24 px-6 bg-gray-50" id="projects">
+      <section class="py-16 sm:py-24 px-6 bg-gray-50 dark:bg-gray-900" id="projects">
         <div class="max-w-6xl mx-auto">
-          <h2 class="text-5xl font-bold text-center mb-16 text-gray-900">Projects</h2>
-          <div class="grid md:grid-cols-3 gap-10">
+          <h2 class="text-4xl sm:text-5xl font-bold text-center mb-10 sm:mb-16 text-gray-900 dark:text-white">Projects</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
             <div class="flip-card group h-72 bg-transparent">
               <div class="flip-card-inner">
-                <div class="flip-card-front bg-gray-800 p-6 shadow-xl flex flex-col justify-center rounded-xl">
-                  <h3 class="text-2xl font-semibold mb-3 text-cyan-400">AI Chess Trainer</h3>
-                  <p class="text-white">A chess board with AI engine and training tips for each move using Stockfish API.</p>
+                <div class="flip-card-front bg-gray-800 dark:bg-gray-700 p-6 shadow-xl flex flex-col justify-center rounded-xl">
+                  <h3 class="text-xl sm:text-2xl font-semibold mb-3 text-cyan-400">AI Chess Trainer</h3>
+                  <p class="text-gray-200 text-sm sm:text-base">A chess board with AI engine and training tips for each move using Stockfish API.</p>
                 </div>
-                <div class="flip-card-back bg-gray-700 p-6 shadow-xl flex flex-col items-center justify-center rounded-xl">
-                  <p class="text-white text-center">Built with React, Tailwind, and WebAssembly</p>
+                <div class="flip-card-back bg-gray-700 dark:bg-gray-600 p-6 shadow-xl flex flex-col items-center justify-center rounded-xl">
+                  <p class="text-gray-200 text-sm sm:text-base text-center">Built with React, Tailwind, and WebAssembly</p>
                 </div>
               </div>
             </div>
+            <div class="flip-card group h-72 bg-transparent">
+                <div class="flip-card-inner">
+                  <div class="flip-card-front bg-gray-800 dark:bg-gray-700 p-6 shadow-xl flex flex-col justify-center rounded-xl">
+                    <h3 class="text-xl sm:text-2xl font-semibold mb-3 text-emerald-400">Task Manager App</h3>
+                    <p class="text-gray-200 text-sm sm:text-base">A full-stack task management application with user authentication and real-time updates.</p>
+                  </div>
+                  <div class="flip-card-back bg-gray-700 dark:bg-gray-600 p-6 shadow-xl flex flex-col items-center justify-center rounded-xl">
+                    <p class="text-gray-200 text-sm sm:text-base text-center">Utilized Node.js, Express, MongoDB, and React</p>
+                  </div>
+                </div>
+              </div>
+              <div class="flip-card group h-72 bg-transparent">
+                <div class="flip-card-inner">
+                  <div class="flip-card-front bg-gray-800 dark:bg-gray-700 p-6 shadow-xl flex flex-col justify-center rounded-xl">
+                    <h3 class="text-xl sm:text-2xl font-semibold mb-3 text-yellow-400">E-commerce Frontend</h3>
+                    <p class="text-gray-200 text-sm sm:text-base">A responsive e-commerce storefront with product listings and a shopping cart functionality.</p>
+                  </div>
+                  <div class="flip-card-back bg-gray-700 dark:bg-gray-600 p-6 shadow-xl flex flex-col items-center justify-center rounded-xl">
+                    <p class="text-gray-200 text-sm sm:text-base text-center">Developed with Angular, NgRx, and Tailwind CSS</p>
+                  </div>
+                </div>
+              </div>
           </div>
         </div>
       </section>
 
-      <section class="py-24 px-6 bg-gray-100" id="contact">
+      <section class="py-16 sm:py-24 px-6 bg-gray-100 dark:bg-gray-800" id="contact">
         <div class="max-w-3xl mx-auto text-center">
-          <h2 class="text-5xl font-bold mb-8 text-gray-900">Contact Me</h2>
-          <p class="mb-8 text-lg text-gray-700">Want to work together or just say hi? Drop a message below or reach out through social media.</p>
-          <form class="space-y-6">
-            <input type="text" placeholder="Your Name" class="w-full p-4 rounded-lg bg-gray-200 text-gray-900 placeholder-gray-500" />
-            <input type="email" placeholder="Your Email" class="w-full p-4 rounded-lg bg-gray-200 text-gray-900 placeholder-gray-500" />
-            <textarea rows="5" placeholder="Your Message" class="w-full p-4 rounded-lg bg-gray-200 text-gray-900 placeholder-gray-500"></textarea>
-            <button type="submit" class="bg-cyan-600 hover:bg-cyan-700 px-8 py-3 rounded-lg transition-all text-lg font-medium text-white">Send Message</button>
+          <h2 class="text-4xl sm:text-5xl font-bold mb-6 sm:mb-8 text-gray-900 dark:text-white">Contact Me</h2>
+          <p class="mb-6 sm:mb-8 text-base sm:text-lg text-gray-700 dark:text-gray-300">Want to work together or just say hi? Drop a message below or reach out through social media.</p>
+          <form class="space-y-4 sm:space-y-6">
+            <input type="text" placeholder="Your Name" class="w-full p-3 sm:p-4 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 border border-transparent focus:border-blue-500 focus:outline-none transition-colors" />
+            <input type="email" placeholder="Your Email" class="w-full p-3 sm:p-4 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 border border-transparent focus:border-blue-500 focus:outline-none transition-colors" />
+            <textarea rows="4" placeholder="Your Message" class="w-full p-3 sm:p-4 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 border border-transparent focus:border-blue-500 focus:outline-none transition-colors"></textarea>
+            <button type="submit" class="bg-cyan-600 hover:bg-cyan-700 px-6 py-2 sm:px-8 sm:py-3 rounded-lg transition-all text-base sm:text-lg font-medium text-white">Send Message</button>
           </form>
         </div>
       </section>
 
-      <footer class="bg-gray-900 text-center py-6 border-t border-gray-700">
-        <div class="flex justify-center space-x-6 mb-3">
-          <a href="https://github.com/yourusername" target="_blank" class="text-gray-400 hover:text-white transition">GitHub</a>
-          <a href="https://linkedin.com/in/yourusername" target="_blank" class="text-gray-400 hover:text-white transition">LinkedIn</a>
+      <footer class="bg-gray-900 text-center py-6 border-t border-gray-700 dark:bg-gray-950 dark:border-gray-800">
+        <div class="flex justify-center space-x-4 sm:space-x-6 mb-3">
+          <a href="https://github.com/yourusername" target="_blank" class="text-gray-400 hover:text-white transition text-sm sm:text-base">GitHub</a>
+          <a href="https://linkedin.com/in/yourusername" target="_blank" class="text-gray-400 hover:text-white transition text-sm sm:text-base">LinkedIn</a>
         </div>
-        <p class="text-gray-400">© 2025 Surendar. All rights reserved.</p>
+        <p class="text-gray-400 text-sm sm:text-base">© 2025 Surendar. All rights reserved.</p>
       </footer>
     </div>
 
@@ -341,10 +383,13 @@
       });
 
       const cursor = document.getElementById("cursor");
-      document.addEventListener("mousemove", (e) => {
-        cursor.style.left = e.clientX + "px";
-        cursor.style.top = e.clientY + "px";
-      });
+      // Only attach mousemove listener if pointer: fine (desktop-like device)
+      if (window.matchMedia('(pointer: fine)').matches) {
+          document.addEventListener("mousemove", (e) => {
+              cursor.style.left = e.clientX + "px";
+              cursor.style.top = e.clientY + "px";
+          });
+      }
     </script>
   </body>
 </html>
