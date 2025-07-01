@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en" x-data="{ darkMode: localStorage.getItem('theme') === 'dark' }" x-bind:class="{ 'dark': darkMode }">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Surendar's Futuristic Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.4/dist/cdn.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <style>
+      html {
+        scroll-behavior: smooth;
+        cursor: none;
+      }
+      body {
+        position: relative;
+        overflow-x: hidden;
+        /* Default light theme styles for body */
+        background-color: #f9fafb; /* bg-gray-50 */
+        color: #111827; /* text-gray-900 */
+        transition: background-color 0.5s, color 0.5s;
+      }
+
+      /* Dark mode styles for core elements */
+      html.dark body {
+        background-color: #1a202c; /* Deeper dark gray */
+        color: #e2e8f0; /* Light text for contrast */
+      }
+
+      /* Specific element overrides for dark mode */
+      html.dark .terminal-box {
+        background-color: #0d1117; /* Even darker for terminal */
+        color: #00ffcc; /* Terminal green */
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.1); /* Subtle glow */
+      }
+      html.dark header {
+        background-color: rgba(26, 32, 44, 0.9); /* Darker, slightly transparent header */
+        border-color: #2d3748; /* Darker border */
+      }
+      html.dark .text-black { /* For your site title and nav links */
+        color: #e2e8f0 ; /* Light text in dark mode */
+      }
+      html.dark .text-gray-900 { /* For section headings and other primary text */
+        color: #e2e8f0; /* Light text in dark mode */
+      }
+      html.dark .text-gray-700 { /* For paragraph text */
+        color: #cbd5e0; /* Slightly darker light text */
+      }
+      html.dark .bg-gray-100 { /* For sections like 'About' and 'Contact' */
+        background-color: #2d3748; /* Medium dark gray */
+      }
+      html.dark .bg-gray-50 { /* For 'Projects' section */
+        background-color: #1a202c; /* Matches body background */
+      }
+      html.dark input, html.dark textarea {
+        background-color: #4a5568; /* Darker input background */
+        color: #e2e8f0; /* Light input text */
+        border-color: #6366f1; /* Subtle border for focus */
+      }
+      html.dark footer {
+        background-color: #0d1117; /* Darker footer */
+        border-color: #2d3748;
+      }
+
+      /* Neon glow for light mode (now black text with blue glow) */
+      .neon-glow {
+        text-shadow: 0 0 10px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 0, 0, 0.5); /* Black glow for contrast */
+      }
+      /* Specific override for the 'Surendar' text to make it pure black */
+      h1.neon-glow {
+          color: #000; /* Pure black text */
+          text-shadow: 0 0 8px rgba(0, 0, 0, 0.3), 0 0 15px rgba(0, 0, 0, 0.2); /* Softer black glow */
+      }
+      /* Neon glow for dark mode (retained blue glow) */
+      html.dark .neon-glow {
+          text-shadow: 0 0 10px #63b3ed, 0 0 20px #63b3ed, 0 0 30px #63b3ed; /* Adjusted neon glow for dark mode */
+      }
+      /* Ensure Surendar text is light in dark mode */
+      html.dark h1.neon-glow {
+          color: #e2e8f0; /* Light text in dark mode */
+      }
+
+      /* Typed.js text color for dark mode */
+      html.dark #typed {
+        color: #fefefe; /* text-blue-300 */
+      }
+
+         html #typed {
+        color: #3d007d; /* text-blue-300 */
+      }
+
+
+      /* Hover states for dark mode navigation links */
+      html.dark .hover\:text-blue-700:hover {
+          color: #63b3ed; /* A lighter blue for hover in dark mode */
+      }
+      /* Resume button for dark mode */
+      html.dark .bg-blue-600 {
+          background-color: #4c51bf; /* Darker blue button */
+      }
+      html.dark .hover\:bg-blue-700:hover {
+          background-color: #5a63c6; /* Slightly lighter hover */
+      }
+
+
+      #main-content.blur-overlay {
+        filter: blur(8px);
+        transition: filter 0.8s ease;
+      }
+      .floating-shape {
+        position: absolute;
+        animation: float 6s ease-in-out infinite;
+        opacity: 0.05;
+        z-index: 0;
+      }
+      @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-20px); }
+      }
+      .cursor {
+        position: fixed;
+        width: 14px;
+        height: 14px;
+        background: radial-gradient(circle, #0ff, #00f);
+        border-radius: 9999px;
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+        z-index: 1001;
+        box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+      }
+      .terminal-box {
+        background-color: #111827;
+        border-radius: 1rem;
+        padding: 2rem;
+        margin-top: 2rem;
+        font-family: 'Courier New', Courier, monospace;
+        color: #00ffcc;
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .flip-card {
+        perspective: 1000px;
+      }
+      .flip-card-inner {
+        transition: transform 0.8s;
+        transform-style: preserve-3d;
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
+      .group:hover .flip-card-inner {
+        transform: rotateY(180deg);
+      }
+      .flip-card-front, .flip-card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        border-radius: 1rem;
+      }
+      .flip-card-back {
+        transform: rotateY(180deg);
+      }
+      .intro-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(15, 23, 42, 0.95);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        transition: opacity 0.8s ease;
+      }
+      .intro-text-container {
+        display: inline-block;
+        white-space: nowrap;
+        overflow: hidden;
+        max-width: 90vw;
+        text-align: center;
+      }
+      #intro-typed-text {
+        font-family: 'Courier New', Courier, monospace;
+        color: #38bdf8;
+        font-size: 1.25rem;
+      }
+      .typed-cursor {
+        opacity: 1;
+        -webkit-animation: blink 0.7s infinite;
+        -moz-animation: blink 0.7s infinite;
+        animation: blink 0.7s infinite;
+        color: #38bdf8;
+      }
+      #projects{
+        color : rgb(0, 0, 0) !important
+      }
+      @keyframes blink {
+        0% { opacity: 1; }
+        50% { opacity: 0; }
+        100% { opacity: 1; }
+      }
+    </style>
+  </head>
+  <body x-data="{ showIntro: !localStorage.getItem('portfolioVisited') }"
+        @alpine:initialized="if(showIntro) localStorage.setItem('portfolioVisited', 'true')"
+        class="font-sans transition-colors duration-500">
+
+    <div x-show="showIntro" class="intro-modal" x-transition.opacity.duration.1000ms>
+      <div class="intro-text-container">
+        <span id="intro-typed-text"></span>
+      </div>
+    </div>
+
+    <div id="cursor" class="cursor"></div>
+
+    <div id="main-content"
+         x-bind:class="{ 'blur-overlay': showIntro }"
+         x-init="
+            if(showIntro) {
+                let introTyped = new Typed('#intro-typed-text', {
+                    strings: ['Welcome to Surendar\'s Futuristic Portfolio'],
+                    typeSpeed: 60,
+                    showCursor: true,
+                    onComplete: (self) => {
+                        setTimeout(() => {
+                            self.destroy();
+                            showIntro = false;
+                        }, 1000);
+                    }
+                });
+            }
+         ">
+      <svg class="floating-shape top-10 left-10 w-40 h-40 text-cyan-500" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /></svg>
+      <svg class="floating-shape bottom-20 right-20 w-32 h-32 text-purple-600" fill="currentColor" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="5" /></svg>
+
+      <header class="fixed top-0 left-0 w-full z-40 bg-gray-100/80 backdrop-blur-md border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center z-50">
+          <h1 class="text-xl font-bold text-black tracking-wide neon-glow">Surendar</h1>
+          <nav class="space-x-6 z-50 opacity-100 visible flex items-center">
+            <a href="#about" class="text-black hover:text-blue-700 transition">About</a>
+            <a href="#projects" style="color: #ffffff !important; font-size: 1rem !important; font-weight: normal !important; opacity: 1 !important; visibility: visible !important; display: inline-block !important;" class="hover:text-blue-700 transition">Projects</a>
+            <a href="#contact" class="text-black hover:text-blue-700 transition">Contact</a>
+            <a href="resume.pdf" class="text-white bg-blue-600 border border-blue-600 rounded px-3 py-1 hover:bg-blue-700 hover:border-blue-700 transition">Resume</a>
+
+            <button @click="darkMode = !darkMode; localStorage.setItem('theme', darkMode ? 'dark' : 'light')"
+                    class="ml-6 p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-300 focus:outline-none">
+              <template x-if="darkMode">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+              </template>
+              <template x-if="!darkMode">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h1M4 12H3m15.325 6.775l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              </template>
+            </button>
+          </nav>
+        </div>
+      </header>
+
+      <section class="h-screen flex flex-col items-center justify-center relative pt-24 overflow-hidden text-center z-10">
+        <h1 class="text-6xl md:text-7xl font-extrabold mb-4 tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 animate-pulse">Hi, I'm Surendar</h1>
+        <div class="text-2xl md:text-3xl mb-6 text-gray-800 dark:text-blue-300">
+          <span id="typed"></span>
+        </div>
+        <a href="#projects" class="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-cyan-600 hover:to-blue-600 px-10 py-4 rounded-full text-white text-lg font-medium shadow-xl transition-all duration-300">View My Work</a>
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce text-cyan-500 text-sm">Scroll ↓</div>
+      </section>
+
+      <div class="terminal-box">
+        <p>$ whoami</p>
+        <p>surendar@developer:~$ Passionate about futuristic UI and full-stack innovation</p>
+        <p>surendar@developer:~$ Crafting immersive web experiences with code + creativity</p>
+      </div>
+
+      <section class="py-24 px-6 bg-gray-100" id="about">
+        <div class="max-w-5xl mx-auto text-center">
+          <h2 class="text-5xl font-bold mb-8 text-gray-900">About Me</h2>
+          <p class="text-xl text-gray-700 leading-relaxed">I'm a passionate developer focused on building modern, scalable, and responsive web applications. With experience in Angular, Tailwind CSS, Firebase, and more, I strive to deliver clean UI, delightful animations, and practical solutions that make life easier.</p>
+        </div>
+      </section>
+
+      <section class="py-24 px-6 bg-gray-50" id="projects">
+        <div class="max-w-6xl mx-auto">
+          <h2 class="text-5xl font-bold text-center mb-16 text-gray-900">Projects</h2>
+          <div class="grid md:grid-cols-3 gap-10">
+            <div class="flip-card group h-72 bg-transparent">
+              <div class="flip-card-inner">
+                <div class="flip-card-front bg-gray-800 p-6 shadow-xl flex flex-col justify-center rounded-xl">
+                  <h3 class="text-2xl font-semibold mb-3 text-cyan-400">AI Chess Trainer</h3>
+                  <p class="text-white">A chess board with AI engine and training tips for each move using Stockfish API.</p>
+                </div>
+                <div class="flip-card-back bg-gray-700 p-6 shadow-xl flex flex-col items-center justify-center rounded-xl">
+                  <p class="text-white text-center">Built with React, Tailwind, and WebAssembly</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="py-24 px-6 bg-gray-100" id="contact">
+        <div class="max-w-3xl mx-auto text-center">
+          <h2 class="text-5xl font-bold mb-8 text-gray-900">Contact Me</h2>
+          <p class="mb-8 text-lg text-gray-700">Want to work together or just say hi? Drop a message below or reach out through social media.</p>
+          <form class="space-y-6">
+            <input type="text" placeholder="Your Name" class="w-full p-4 rounded-lg bg-gray-200 text-gray-900 placeholder-gray-500" />
+            <input type="email" placeholder="Your Email" class="w-full p-4 rounded-lg bg-gray-200 text-gray-900 placeholder-gray-500" />
+            <textarea rows="5" placeholder="Your Message" class="w-full p-4 rounded-lg bg-gray-200 text-gray-900 placeholder-gray-500"></textarea>
+            <button type="submit" class="bg-cyan-600 hover:bg-cyan-700 px-8 py-3 rounded-lg transition-all text-lg font-medium text-white">Send Message</button>
+          </form>
+        </div>
+      </section>
+
+      <footer class="bg-gray-900 text-center py-6 border-t border-gray-700">
+        <div class="flex justify-center space-x-6 mb-3">
+          <a href="https://github.com/yourusername" target="_blank" class="text-gray-400 hover:text-white transition">GitHub</a>
+          <a href="https://linkedin.com/in/yourusername" target="_blank" class="text-gray-400 hover:text-white transition">LinkedIn</a>
+        </div>
+        <p class="text-gray-400">© 2025 Surendar. All rights reserved.</p>
+      </footer>
+    </div>
+
+    <script>
+      gsap.registerPlugin(ScrollTrigger);
+
+      gsap.from("a[href='#projects']", { opacity: 0, scale: 0.8, duration: 1.5, delay: 0.8, ease: "elastic.out(1, 0.5)" });
+
+      new Typed("#typed", {
+        strings: ["Creative Developer", "UI/UX Innovator", "AI + Code Explorer"],
+        typeSpeed: 60,
+        backSpeed: 30,
+        loop: true
+      });
+
+      const cursor = document.getElementById("cursor");
+      document.addEventListener("mousemove", (e) => {
+        cursor.style.left = e.clientX + "px";
+        cursor.style.top = e.clientY + "px";
+      });
+    </script>
+  </body>
+</html>
